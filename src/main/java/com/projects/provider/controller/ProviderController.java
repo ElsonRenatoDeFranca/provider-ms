@@ -1,6 +1,6 @@
-package com.projects.moex.cadastro_fornecedor_ms.controller;
+package com.projects.provider.controller;
 
-import com.projects.moex.cadastro_fornecedor_ms.vo.ProviderVO;
+import com.projects.provider.vo.ProviderVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,4 +1,4 @@
-package com.projects.moex.cadastro_fornecedor_ms.dto;
+package com.projects.provider.dto;
 
 public class ProviderDTO {
 

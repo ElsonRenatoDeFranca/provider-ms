@@ -1,7 +1,7 @@
-package com.projects.moex.cadastro_fornecedor_ms.controller;
+package com.projects.provider.controller;
 
 
-import com.projects.moex.cadastro_fornecedor_ms.vo.ProviderVO;
+import com.projects.provider.vo.ProviderVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

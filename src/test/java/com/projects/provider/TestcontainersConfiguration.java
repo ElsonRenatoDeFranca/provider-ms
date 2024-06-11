@@ -1,4 +1,4 @@
-package com.projects.moex.cadastro_fornecedor_ms;
+package com.projects.provider;
 
 import org.springframework.boot.test.context.TestConfiguration;
 
