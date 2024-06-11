@@ -1,0 +1,35 @@
+server:
+  port: 9091
+spring:
+  application:
+    name: cadastro-fornecedor-ms
+  datasource:
+    hikari:
+      connection-test-query: SELECT 1
+      minimum-idle: 1
+      maximum-pool-size: 10
+      pool-name: platforma-database-pool
+      auto-commit: false
+      connection-timeout: 30000
+    url: "jdbc:postgresql://0.0.0.0:5432/tech-talk-db"
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+  sql:
+    init:
+      mode: never
+
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+        format_sql: true
+    show-sql: true
+    generate-ddl: true
