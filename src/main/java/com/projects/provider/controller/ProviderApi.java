@@ -1,6 +1,7 @@
 package com.projects.provider.controller;
 
 
+import com.projects.provider.dto.ProviderDTO;
 import com.projects.provider.vo.ProviderVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,7 +53,7 @@ public interface ProviderApi {
     ResponseEntity<List<ProviderVO>> findAll();
 
 
-    @GetMapping(value = "/find-provider-by-id/{providerId}", produces = {APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/findprovider/{providerId}", produces = {APPLICATION_JSON_VALUE})
     @ResponseBody
     @Operation(summary = "Find provider by providerId")
     @ApiResponses(value = {
@@ -68,7 +69,7 @@ public interface ProviderApi {
     })
     ResponseEntity<ProviderVO> findByProviderId(@PathVariable("providerId") String providerId);
 
-    @DeleteMapping("/delete-provider/{providerId}")
+    @DeleteMapping("/deleteprovider/{providerId}")
     @Operation(summary = "Delete by providerId")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -84,7 +85,7 @@ public interface ProviderApi {
     ResponseEntity<Void> deleteByProviderId(@PathVariable("providerId") String providerId);
 
 
-    @RequestMapping(value = "/update-provider/{providerId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/updateprovider/{providerId}", method = RequestMethod.PUT)
     @Operation(summary = "Update by providerId")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -97,6 +98,6 @@ public interface ProviderApi {
                     description = "The service is not available",
                     content = @Content)
     })
-    ResponseEntity<Void> updateByProviderId(@RequestBody ProviderVO providerVO, @PathVariable("providerId") String providerId);
+    ResponseEntity<Void> updateByProviderId(@RequestBody ProviderDTO providerDto, @PathVariable("providerId") String providerId);
 
 }

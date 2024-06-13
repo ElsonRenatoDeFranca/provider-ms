@@ -4,14 +4,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: crm-app
+    container_name: provider-ms
     ports:
       - "8085:9091"
     depends_on:
       - database
   database:
     image: postgres:latest
-    container_name: cadastro-fornecedor-db
+    container_name: provider-ms
     environment:
       - POSTGRES_PASSWORD="password"
       - POSTGRES_USER="user"

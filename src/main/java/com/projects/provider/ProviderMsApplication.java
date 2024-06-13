@@ -2,9 +2,8 @@ package com.projects.provider;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 
-@SpringBootApplication(exclude = {JdbcTemplateAutoConfiguration.class})
+@SpringBootApplication
 public class ProviderMsApplication {
 
 	public static void main(String[] args) {
