@@ -1,7 +1,5 @@
 package com.projects.provider.controller;
 
-import com.projects.provider.exception.ProviderMismatchException;
-import com.projects.provider.exception.ProviderNotFoundException;
 import com.projects.provider.dto.ProviderDTO;
 import com.projects.provider.mapper.ProviderMapper;
 import com.projects.provider.service.ProviderService;
@@ -29,12 +27,10 @@ public class ProviderController implements ProviderApi {
     @Override
     public ResponseEntity<Void> save(ProviderVO providerVO) {
         log.info("Saving provider {}", providerVO);
-        try {
-            providerService.save(providerMapper.voToDTO(providerVO));
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (ProviderMismatchException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        providerService.save(providerMapper.voToDTO(providerVO));
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
     }
 
     @Override
@@ -57,25 +53,15 @@ public class ProviderController implements ProviderApi {
     @Override
     public ResponseEntity<Void> deleteByProviderId(String providerId) {
         log.info("Deleting provider by id {}", providerId);
-
-        try {
-            providerService.deleteByProviderId(providerId);
-            return ResponseEntity.ok().build();
-        } catch (ProviderNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        providerService.deleteByProviderId(providerId);
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<Void> updateByProviderId(ProviderDTO providerDto, String providerId) {
         log.info("Update provider by id {}", providerId);
-
-        try {
-            providerService.updateByProviderId(providerDto, providerId);
-            return ResponseEntity.ok().build();
-        } catch (ProviderNotFoundException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        providerService.updateByProviderId(providerDto, providerId);
+        return ResponseEntity.noContent().build();
     }
 
 }

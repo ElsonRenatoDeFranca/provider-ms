@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @RequestMapping("/api/provider")
 public interface ProviderApi {
@@ -85,7 +86,7 @@ public interface ProviderApi {
     ResponseEntity<Void> deleteByProviderId(@PathVariable("providerId") String providerId);
 
 
-    @RequestMapping(value = "/updateprovider/{providerId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/updateprovider/{providerId}", method = RequestMethod.PUT, produces = {APPLICATION_JSON_VALUE})
     @Operation(summary = "Update by providerId")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",

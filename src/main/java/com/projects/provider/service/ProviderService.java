@@ -1,6 +1,6 @@
 package com.projects.provider.service;
 
-import com.projects.provider.exception.ProviderMismatchException;
+import com.projects.provider.exception.ProviderAlreadyExistsException;
 import com.projects.provider.exception.ProviderNotFoundException;
 import com.projects.provider.mapper.ProviderMapper;
 import com.projects.provider.model.Provider;
@@ -38,11 +38,11 @@ public class ProviderService {
     }
 
     @Transactional
-    public void save(ProviderDTO providerDto) throws ProviderMismatchException {
+    public void save(ProviderDTO providerDto) throws ProviderAlreadyExistsException {
         Provider provider = providerRepository.findByProviderId(providerDto.getProviderId());
 
         if (provider != null) {
-            throw new ProviderMismatchException(PROVIDER_MISMATCH_EXCEPTION_MESSAGE);
+            throw new ProviderAlreadyExistsException(PROVIDER_MISMATCH_EXCEPTION_MESSAGE);
         }
         Provider newProvider = providerMapper.dtoToEntity(providerDto);
         providerRepository.save(newProvider);
