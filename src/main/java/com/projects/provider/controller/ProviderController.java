@@ -60,15 +60,9 @@ public class ProviderController implements ProviderApi {
 
         try {
             providerService.deleteByProviderId(providerId);
-            ProviderDTO customerDto = providerService.findByProviderId(providerId);
-
-            if (customerDto == null) {
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.internalServerError().build();
-            }
+            return ResponseEntity.ok().build();
         } catch (ProviderNotFoundException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 

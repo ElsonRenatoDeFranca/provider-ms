@@ -41,23 +41,22 @@ public class ProviderService {
     public void save(ProviderDTO providerDto) throws ProviderMismatchException {
         Provider provider = providerRepository.findByProviderId(providerDto.getProviderId());
 
-        if (provider == null) {
-            Provider newProvider = providerMapper.dtoToEntity(providerDto);
-            providerRepository.save(newProvider);
-        } else {
+        if (provider != null) {
             throw new ProviderMismatchException(PROVIDER_MISMATCH_EXCEPTION_MESSAGE);
         }
+        Provider newProvider = providerMapper.dtoToEntity(providerDto);
+        providerRepository.save(newProvider);
     }
 
     @Transactional
     public void deleteByProviderId(String providerId) throws ProviderNotFoundException {
         Provider provider = providerRepository.findByProviderId(providerId);
 
-        if (provider != null) {
-            providerRepository.deleteByProviderId(providerId);
-        } else {
+        if (provider == null) {
             throw new ProviderNotFoundException(PROVIDER_NOT_FOUND_EXCEPTION_MESSAGE);
         }
+        providerRepository.deleteByProviderId(providerId);
+
     }
 
     @Transactional
@@ -65,13 +64,13 @@ public class ProviderService {
         Provider existingProvider = providerRepository.findByProviderId(providerId);
         Provider updatedProvider = providerMapper.dtoToEntity(providerDto);
 
-        if (existingProvider != null) {
-            updatedProvider.setProviderId(existingProvider.getProviderId());
-            providerRepository.deleteByProviderId(providerId);
-            providerRepository.save(updatedProvider);
-        } else {
+        if (existingProvider == null) {
             throw new ProviderNotFoundException(PROVIDER_NOT_FOUND_EXCEPTION_MESSAGE);
         }
+
+        updatedProvider.setProviderId(existingProvider.getProviderId());
+        providerRepository.deleteByProviderId(providerId);
+        providerRepository.save(updatedProvider);
         return providerMapper.entityToDto(updatedProvider);
     }
 
