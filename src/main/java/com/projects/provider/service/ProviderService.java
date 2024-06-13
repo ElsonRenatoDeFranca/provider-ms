@@ -68,7 +68,6 @@ public class ProviderService {
             throw new ProviderNotFoundException(PROVIDER_NOT_FOUND_EXCEPTION_MESSAGE);
         }
 
-        updatedProvider.setProviderId(existingProvider.getProviderId());
         providerRepository.deleteByProviderId(providerId);
         providerRepository.save(updatedProvider);
         return providerMapper.entityToDto(updatedProvider);

@@ -58,8 +58,10 @@ public class ProviderController implements ProviderApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateByProviderId(ProviderDTO providerDto, String providerId) {
+    public ResponseEntity<Void> updateByProviderId(ProviderVO providerVO, String providerId) {
         log.info("Update provider by id {}", providerId);
+        var providerDto = providerMapper.voToDTO(providerVO);
+
         providerService.updateByProviderId(providerDto, providerId);
         return ResponseEntity.noContent().build();
     }

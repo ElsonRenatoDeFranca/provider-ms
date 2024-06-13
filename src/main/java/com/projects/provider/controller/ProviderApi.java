@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @RequestMapping("/api/provider")
 public interface ProviderApi {
@@ -99,6 +98,6 @@ public interface ProviderApi {
                     description = "The service is not available",
                     content = @Content)
     })
-    ResponseEntity<Void> updateByProviderId(@RequestBody ProviderDTO providerDto, @PathVariable("providerId") String providerId);
+    ResponseEntity<Void> updateByProviderId(@RequestBody ProviderVO providerVO, @PathVariable("providerId") String providerId);
 
 }
