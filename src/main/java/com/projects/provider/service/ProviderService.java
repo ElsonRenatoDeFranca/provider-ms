@@ -6,9 +6,23 @@ import com.projects.provider.mapper.ProviderMapper;
 import com.projects.provider.model.Provider;
 import com.projects.provider.dto.ProviderDTO;
 import com.projects.provider.repository.ProviderRepository;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -71,6 +85,38 @@ public class ProviderService {
         providerRepository.deleteByProviderId(providerId);
         providerRepository.save(updatedProvider);
         return providerMapper.entityToDto(updatedProvider);
+    }
+
+    public ResponseEntity<byte[]> generateExcelReports() throws IOException {
+        var allProviders = this.findAll();
+        int dataRowIndex = 1;
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("Providers Info");
+        HSSFRow row = sheet.createRow(0);
+
+        row.createCell(0).setCellValue("Provider-ID");
+        row.createCell(1).setCellValue("Provider-Name");
+
+        for (ProviderDTO providerDTO : allProviders) {
+            HSSFRow dataRow = sheet.createRow(dataRowIndex);
+            dataRow.createCell(0).setCellValue(providerDTO.getProviderId());
+            dataRow.createCell(1).setCellValue(providerDTO.getProviderName());
+            dataRowIndex++;
+        }
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        workbook.write(stream);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        headers.setContentDispositionFormData("attachment", "sample.xlsx");
+
+        workbook.close();
+        stream.close();
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(stream.toByteArray());
     }
 
 

@@ -1,7 +1,6 @@
 package com.projects.provider.controller;
 
 
-import com.projects.provider.dto.ProviderDTO;
 import com.projects.provider.vo.ProviderVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -99,5 +99,20 @@ public interface ProviderApi {
                     content = @Content)
     })
     ResponseEntity<Void> updateByProviderId(@RequestBody ProviderVO providerVO, @PathVariable("providerId") String providerId);
+
+
+    @GetMapping(value = "/excel-download", produces = {APPLICATION_JSON_VALUE})
+    @ResponseBody
+    @Operation(summary = "download all providers")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Download all providers",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "503",
+                    description = "The service is not available",
+                    content = @Content)
+    })
+    ResponseEntity<byte[]> downloadProviders() throws IOException;
+
 
 }

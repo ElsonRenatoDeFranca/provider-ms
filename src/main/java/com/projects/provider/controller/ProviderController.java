@@ -1,6 +1,5 @@
 package com.projects.provider.controller;
 
-import com.projects.provider.dto.ProviderDTO;
 import com.projects.provider.mapper.ProviderMapper;
 import com.projects.provider.service.ProviderService;
 import com.projects.provider.vo.ProviderVO;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -65,5 +65,11 @@ public class ProviderController implements ProviderApi {
         providerService.updateByProviderId(providerDto, providerId);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<byte[]> downloadProviders() throws IOException {
+        return this.providerService.generateExcelReports();
+    }
+
 
 }
