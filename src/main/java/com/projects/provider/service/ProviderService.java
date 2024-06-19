@@ -11,19 +11,28 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service
 public class ProviderService {
@@ -119,5 +128,28 @@ public class ProviderService {
                 .body(stream.toByteArray());
     }
 
+    public void upload(MultipartFile file) throws IOException {
+        Path tempDir = Files.createTempDirectory("");
+        File tempFile = tempDir.resolve(file.getOriginalFilename()).toFile();
+        Workbook workbook = WorkbookFactory.create(tempFile);
+        Sheet sheet = workbook.getSheetAt(0);
+        Stream<Row> rowStream = StreamSupport.stream(sheet.spliterator(), false);
+        Row headerRow = rowStream.findFirst().get();
+        //Stream<Cell> headerCells = StreamSupport.stream(row.spliterator(), false);
 
-}
+        rowStream.forEach(row -> {
+            Stream<Cell> cellStream = StreamSupport.stream(row.spliterator(), false);
+
+            List<String> cellVals = cellStream.map(cell -> {
+                String cellVal = cell.getStringCellValue();
+                return cellVal;
+            }).collect(Collectors.toList());
+
+            System.out.println(cellVals);
+        });
+    }
+
+
+
+
+    }

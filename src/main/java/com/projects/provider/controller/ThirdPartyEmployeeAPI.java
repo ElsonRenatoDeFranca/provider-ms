@@ -1,7 +1,7 @@
 package com.projects.provider.controller;
 
-
 import com.projects.provider.vo.ProviderVO;
+import com.projects.provider.vo.ThirdPartyVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,36 +14,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RequestMapping("/api/provider")
-public interface ProviderApi {
-    @PostMapping(value = "/add-provider", produces = {APPLICATION_JSON_VALUE})
-    @Operation(summary = "Save a provider to database")
+public interface ThirdPartyEmployeeAPI {
+    @PostMapping(value = "/add", produces = {APPLICATION_JSON_VALUE})
+    @Operation(summary = "Save a third party employee  to database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
-                    description = "Save a provider to database",
+                    description = "Save a third party employee to database",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "406",
-                    description = "The provider is already at database",
+                    description = "The third party employee is already at database",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "503",
                     description = "The service is not available",
                     content = @Content)
     })
-    ResponseEntity<Void> save(@RequestBody ProviderVO providerVO);
+    ResponseEntity<Void> save(@RequestBody ThirdPartyVO thirdPartyVO);
 
 
     @GetMapping(value = "/findall", produces = {APPLICATION_JSON_VALUE})
     @ResponseBody
-    @Operation(summary = "Find all providers")
+    @Operation(summary = "Find all third party employee")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Find all providers",
@@ -52,83 +48,54 @@ public interface ProviderApi {
                     description = "The service is not available",
                     content = @Content)
     })
-    ResponseEntity<List<ProviderVO>> findAll();
+    ResponseEntity<List<ThirdPartyVO>> findAll();
 
 
-    @GetMapping(value = "/findprovider/{providerId}", produces = {APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/findByThirdPartyName/{thirdPartyName}", produces = {APPLICATION_JSON_VALUE})
     @ResponseBody
-    @Operation(summary = "Find provider by providerId")
+    @Operation(summary = "Find by thirdPartyId")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Find a provider by providerId",
+                    description = "Find by thirdPartyId",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
-                    description = "provider not found at database",
+                    description = "thirdPartyId not found at database",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "503",
                     description = "The service is not available",
                     content = @Content)
     })
-    ResponseEntity<ProviderVO> findByProviderId(@PathVariable("providerId") String providerId);
+    ResponseEntity<ThirdPartyVO> findByThirdPartyName(@PathVariable("thirdPartyName") String thirdPartyName);
 
-    @DeleteMapping("/deleteprovider/{providerId}")
-    @Operation(summary = "Delete by providerId")
+    @DeleteMapping("/delete/{thirdPartyName}")
+    @Operation(summary = "Delete by thirdPartyName")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Delete by providerId",
+                    description = "Delete by thirdPartyName",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
-                    description = "provider not found",
+                    description = "thirdPartyId not found",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "503",
                     description = "The service is not available",
                     content = @Content)
     })
-    ResponseEntity<Void> deleteByProviderId(@PathVariable("providerId") String providerId);
+    ResponseEntity<Void> deleteByThirdPartyName(@PathVariable("thirdPartyName") String thirdPartyName);
 
 
-    @RequestMapping(value = "/updateprovider/{providerId}", method = RequestMethod.PUT, produces = {APPLICATION_JSON_VALUE})
-    @Operation(summary = "Update by providerId")
+    @RequestMapping(value = "/update/{thirdPartyName}", method = RequestMethod.PUT, produces = {APPLICATION_JSON_VALUE})
+    @Operation(summary = "Update by thirdPartyName")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "update by providerId",
+                    description = "update by thirdPartyName",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404",
-                    description = "provider not found",
+                    description = "thirdPartyName not found",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "503",
                     description = "The service is not available",
                     content = @Content)
     })
-    ResponseEntity<Void> updateByProviderId(@RequestBody ProviderVO providerVO, @PathVariable("providerId") String providerId);
-
-
-    @GetMapping(value = "/excel-download", produces = {APPLICATION_JSON_VALUE})
-    @ResponseBody
-    @Operation(summary = "download all providers")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Download all providers",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "503",
-                    description = "The service is not available",
-                    content = @Content)
-    })
-    ResponseEntity<byte[]> downloadProviders() throws IOException;
-
-
-    @GetMapping(value = "/excel-upload", produces = {APPLICATION_JSON_VALUE})
-    @ResponseBody
-    @Operation(summary = "download all providers")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Download all providers",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "503",
-                    description = "The service is not available",
-                    content = @Content)
-    })
-    ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file ) throws IOException;
-
+    ResponseEntity<Void> updateByThirdPartyName(@RequestBody ThirdPartyVO thirdPartyVO, @PathVariable("thirdPartyName") String thirdPartyName);
 
 }

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -69,6 +70,12 @@ public class ProviderController implements ProviderApi {
     @Override
     public ResponseEntity<byte[]> downloadProviders() throws IOException {
         return this.providerService.generateExcelReports();
+    }
+
+    @Override
+    public ResponseEntity<Void> upload(MultipartFile file) throws IOException {
+        this.providerService.upload(file);
+        return ResponseEntity.ok().build();
     }
 
 
