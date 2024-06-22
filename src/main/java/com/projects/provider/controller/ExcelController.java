@@ -1,7 +1,9 @@
 package com.projects.provider.controller;
 
+import com.projects.provider.dto.BudgetDTO;
 import com.projects.provider.dto.ProviderDTO;
 import com.projects.provider.exception.ResponseMessage;
+import com.projects.provider.service.BudgetService;
 import com.projects.provider.service.ExcelService;
 import com.projects.provider.service.ProviderService;
 import com.projects.provider.util.ExcelHelper;
@@ -35,13 +37,15 @@ public class ExcelController {
 
     private final ExcelService excelService;
     private final ProviderService providerService;
+    private final BudgetService budgetService;
 
-    public ExcelController(ExcelService excelService, ProviderService providerService) {
+    public ExcelController(ExcelService excelService, ProviderService providerService, BudgetService budgetService) {
         this.excelService = excelService;
         this.providerService = providerService;
+        this.budgetService = budgetService;
     }
 
-    @PostMapping(value= "providers/upload", produces = {APPLICATION_JSON_VALUE}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "providers/upload", produces = {APPLICATION_JSON_VALUE}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     @Operation(summary = "upload all providers")
     @ApiResponses(value = {
@@ -52,7 +56,7 @@ public class ExcelController {
                     description = "The service is not available",
                     content = @Content)
     })
-    public ResponseEntity<Object> uploadProvidersFile(@RequestPart("file") MultipartFile file ) {
+    public ResponseEntity<Object> uploadProvidersFile(@RequestPart("file") MultipartFile file) {
         var message = "";
         if (ExcelHelper.hasExcelFormat(file)) {
             try {
@@ -96,7 +100,7 @@ public class ExcelController {
                     description = "The service is not available",
                     content = @Content)
     })
-    ResponseEntity<byte[]> downloadProviders() throws IOException{
+    ResponseEntity<byte[]> downloadProviders() throws IOException {
         var allProviders = this.providerService.findAll();
         int dataRowIndex = 1;
 
@@ -128,5 +132,48 @@ public class ExcelController {
                 .body(stream.toByteArray());
     }
 
+
+    @GetMapping(value = "budget/download", produces = {APPLICATION_JSON_VALUE})
+    @ResponseBody
+    @Operation(summary = "download budget")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Download budgets",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "503",
+                    description = "The service is not available",
+                    content = @Content)
+    })
+    ResponseEntity<byte[]> downloadBudgets() throws IOException {
+        var allBudgets = this.budgetService.findAll();
+        int dataRowIndex = 1;
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("Providers Info");
+        HSSFRow row = sheet.createRow(0);
+
+        row.createCell(0).setCellValue("Provider-ID");
+        row.createCell(1).setCellValue("Provider-Name");
+
+        for (BudgetDTO budgetDTO : allBudgets) {
+            HSSFRow dataRow = sheet.createRow(dataRowIndex);
+            dataRow.createCell(0).setCellValue(budgetDTO.getBudgetId());
+            dataRow.createCell(1).setCellValue(budgetDTO.getCostCenter());
+            dataRowIndex++;
+        }
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        workbook.write(stream);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        headers.setContentDispositionFormData("attachment", "sample.xlsx");
+
+        workbook.close();
+        stream.close();
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(stream.toByteArray());
+    }
 
 }
