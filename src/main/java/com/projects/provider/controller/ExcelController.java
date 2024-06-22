@@ -72,8 +72,18 @@ public class ExcelController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
     }
 
-    @PostMapping("budget/upload")
-    public ResponseEntity<Object> uploadBudgetFile(@RequestParam("file") MultipartFile file) {
+    @PostMapping(value = "budget/upload", produces = {APPLICATION_JSON_VALUE}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    @Operation(summary = "upload all providers")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "upload all providers",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "503",
+                    description = "The service is not available",
+                    content = @Content)
+    })
+    public ResponseEntity<Object> uploadBudgetFile(@RequestPart("file") MultipartFile file) {
         var message = "";
         if (ExcelHelper.hasExcelFormat(file)) {
             try {
@@ -149,11 +159,11 @@ public class ExcelController {
         int dataRowIndex = 1;
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Providers Info");
+        HSSFSheet sheet = workbook.createSheet("Budget-info");
         HSSFRow row = sheet.createRow(0);
 
-        row.createCell(0).setCellValue("Provider-ID");
-        row.createCell(1).setCellValue("Provider-Name");
+        row.createCell(0).setCellValue("budgetId");
+        row.createCell(1).setCellValue("costCenter");
 
         for (BudgetDTO budgetDTO : allBudgets) {
             HSSFRow dataRow = sheet.createRow(dataRowIndex);
@@ -166,7 +176,7 @@ public class ExcelController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-        headers.setContentDispositionFormData("attachment", "sample.xlsx");
+        headers.setContentDispositionFormData("attachment", "Budget-Sample-A.xlsx");
 
         workbook.close();
         stream.close();

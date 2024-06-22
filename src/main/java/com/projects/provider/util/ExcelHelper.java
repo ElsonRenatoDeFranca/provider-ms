@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -66,7 +67,7 @@ public class ExcelHelper {
 
     public static List<Budget> excelToBudget(InputStream is) {
         try {
-            Workbook workbook = new HSSFWorkbook(is);
+            Workbook workbook = new XSSFWorkbook(is);
             Sheet sheet = workbook.getSheet(BUDGET_SHEET);
             Iterator<Row> rows = sheet.iterator();
             List<Budget> providers = new ArrayList<Budget>();
@@ -89,6 +90,9 @@ public class ExcelHelper {
                             break;
                         case 1:
                             budget.setCostCenter(currentCell.getStringCellValue());
+                            break;
+                        case 2:
+                            budget.setRequestDescription(currentCell.getStringCellValue());
                             break;
                         default:
                             break;
