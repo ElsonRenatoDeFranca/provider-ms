@@ -164,11 +164,15 @@ public class ExcelController {
 
         row.createCell(0).setCellValue("budgetId");
         row.createCell(1).setCellValue("costCenter");
+        row.createCell(2).setCellValue("RequestDescription");
+
 
         for (BudgetDTO budgetDTO : allBudgets) {
             HSSFRow dataRow = sheet.createRow(dataRowIndex);
             dataRow.createCell(0).setCellValue(budgetDTO.getBudgetId());
             dataRow.createCell(1).setCellValue(budgetDTO.getCostCenter());
+            dataRow.createCell(2).setCellValue(budgetDTO.getRequestDescription());
+
             dataRowIndex++;
         }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
