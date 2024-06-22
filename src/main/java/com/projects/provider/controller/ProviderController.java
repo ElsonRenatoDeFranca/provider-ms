@@ -72,16 +72,4 @@ public class ProviderController implements ProviderApi {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
-    public ResponseEntity<byte[]> downloadProviders() throws IOException {
-        return this.providerService.generateExcelReports();
-    }
-
-    @Override
-    public ResponseEntity<Void> upload(MultipartFile file) throws IOException {
-        this.providerService.upload(file);
-        return ResponseEntity.ok().build();
-    }
-
-
 }

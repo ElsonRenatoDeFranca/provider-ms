@@ -105,32 +105,6 @@ public interface ProviderApi {
     ResponseEntity<Void> updateByProviderId(@RequestBody ProviderVO providerVO, @PathVariable("providerId") String providerId);
 
 
-    @GetMapping(value = "/excel-download", produces = {APPLICATION_JSON_VALUE})
-    @ResponseBody
-    @Operation(summary = "download all providers")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Download all providers",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "503",
-                    description = "The service is not available",
-                    content = @Content)
-    })
-    ResponseEntity<byte[]> downloadProviders() throws IOException;
-
-
-    @PostMapping(value = "/excel-upload", produces = {APPLICATION_JSON_VALUE}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseBody
-    @Operation(summary = "upload all providers")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "upload all providers",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "503",
-                    description = "The service is not available",
-                    content = @Content)
-    })
-    ResponseEntity<Void> upload(@RequestPart("file") MultipartFile file ) throws IOException;
 
 
 }
