@@ -1,7 +1,10 @@
 package com.projects.provider.controller;
 
+import com.projects.provider.exception.ResponseMessage;
 import com.projects.provider.mapper.ProviderMapper;
+import com.projects.provider.service.ExcelService;
 import com.projects.provider.service.ProviderService;
+import com.projects.provider.util.ExcelHelper;
 import com.projects.provider.vo.ProviderVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +22,12 @@ public class ProviderController implements ProviderApi {
     private static final Logger log = LoggerFactory.getLogger(ProviderController.class);
     private final ProviderService providerService;
     private final ProviderMapper providerMapper;
+    private final ExcelService excelService;
 
-    public ProviderController(ProviderService providerService, ProviderMapper providerMapper) {
+    public ProviderController(ProviderService providerService, ProviderMapper providerMapper, ExcelService excelService) {
         this.providerService = providerService;
         this.providerMapper = providerMapper;
+        this.excelService = excelService;
     }
 
     @Override
